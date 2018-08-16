@@ -19,8 +19,8 @@ from selenium.webdriver.common.by import By
 from datetime import datetime,timedelta # 时间判断
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.remote import webelement
-from selenium.webdriver.common.by import By
-from selenium.webdriver import ActionChains
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver import ActionChains
 
 # 获取寻找小融页面数据
 def getFindXiaoRongData(user_id):
