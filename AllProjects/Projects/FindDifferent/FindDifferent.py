@@ -23,7 +23,7 @@ from selenium.webdriver.remote import webelement
 # from selenium.webdriver import ActionChains
 
 # 获取寻找小融页面数据
-def getFindXiaoRongData(user_id):
+def getFindXiaoRongData(user_i,passNum):
     # url = '%s%s%s' % ("http://game.rongtuojinrong.com/bigWheel/findMissRong?","usrId=",user_id)
     # 参数
     now_time = round(time.time())
@@ -67,7 +67,7 @@ def getFindXiaoRongData(user_id):
             print("今天次数已达上限，请明天再来")
         else: # 不存在，则进行闯关
             time.sleep(2)
-            for num in range(0,25):
+            for num in range(1,int(passNum)):
                 time.sleep(1)  # 等待 1 秒
                 #网页中的代码：<div class="g2_item g2_clicked" style="width: 178.667px; height: 178.667px;"></div>
                 wd.find_element_by_css_selector(".g2_item.g2_clicked").click()
@@ -81,4 +81,5 @@ def getFindXiaoRongData(user_id):
 if __name__ == '__main__':
 
     user_id = input("请输入用户的user_id，点击enter：")
-    getFindXiaoRongData(user_id)
+    passNum = input("请输入想过关数，点击enter：")
+    getFindXiaoRongData(user_id,passNum)
