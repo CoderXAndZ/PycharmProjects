@@ -36,7 +36,7 @@ def find_un_used():
         pic_name = img_names[i]
         print("pic_name:",pic_name)
 
-        print("是否是ignore图片：",is_ignore(pic_name))
+        # print("是否是ignore图片：",is_ignore(pic_name))
         # if is_ignore(pic_name):
         #     continue
         if pic_name == "code" or pic_name == "phone":
@@ -53,6 +53,13 @@ def find_un_used():
                 print ('remove %s' % (images[i]))
                 # 先不删除
                 # os.system('rm -rf %s' % (images[i])) # 直接执行bash命令
+        # #再次执行一遍，有的时候工程中有，但是，依旧显示在了没有的数组里面
+        # for i in range(0,len(unused_imgs)):
+        #     img_name = unused_imgs[i]
+        #     command = 'ag "%s" %s' % (pic_name, path)
+        #     result = os.popen(command).read()
+        #     if result != '':
+        #         unused_imgs.remove(img_name)
     text_path = 'unused.txt'
     tex = '\n'.join(sorted(unused_imgs))
     os.system('echo "%s" > %s' % (tex, text_path))
