@@ -6,7 +6,7 @@ import glob
 import os
 import re
 import shutil
-import time
+# import time
 
 path = '/Users/admin/iosdeleteYoushangcheng/fmapp'
 
@@ -39,7 +39,7 @@ def find_un_used():
         # print("是否是ignore图片：",is_ignore(pic_name))
         # if is_ignore(pic_name):
         #     continue
-        if pic_name == "code" or pic_name == "phone":
+        if pic_name == "code" or pic_name == "phone": # 跳过是因为会报错
             continue
         # command = 'ag "我的_我的邀请_首页_17" /Users/admin/iosdeleteYoushangcheng/fmapp'
         command = 'ag "%s" %s' % (pic_name, path)
@@ -126,4 +126,4 @@ if __name__ == '__main__':
 #
 #
 # if __name__ == '__main__':
-#     find_un_used()
+#     find_un_used()#     find_un_used()#     find_un_used()
