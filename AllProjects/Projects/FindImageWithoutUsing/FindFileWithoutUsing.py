@@ -49,9 +49,12 @@ def find_un_used(array):
         # print("分类数据",extensionClass)
         thirdTool = 'https://github.com/*/%s' % file_name # 第三方 好像不对
         print("是否是第三方：",re.match(thirdTool, file_name))
-        if (string in result) or (extensionClass in result) or re.match(thirdTool, file_name):
+
+        XMPPThirdTool = file_name[0:4]  # 是XMPP第三方工具类都不添加
+
+        if (string in result) or (extensionClass in result) or re.match(thirdTool, file_name): #  or 'JH' or 'MJ' or 'SD'
             print("有引用")
-        else:
+        elif ('XMPP' not in XMPPThirdTool) and ('AFURL' not in file_name[0:5]) and ('DD' not  in file_name[0:2]) and ('JH' not  in file_name[0:2])  and ('MJ' not  in file_name[0:2]) and ('SD' not  in file_name[0:2]) and ('H' not in file_name[0:1]) and ('I' not in file_name[0:1]):
             unused_files.append(file_name)
             # print("\n可能没有引用的文件是：", unused_files)
 
@@ -63,9 +66,9 @@ if __name__ == '__main__':
 
     print("\n长度",len(all_files),"所有的.m文件：", all_files)
 
-    unused_files_path = 'unusedFileName.txt'
+    all_files_path = 'allFileName.txt'
     text_content = '\n'.join(sorted(all_files))
-    os.system('echo "%s" > %s' % (text_content, unused_files_path))
+    os.system('echo "%s" > %s' % (text_content, all_files_path))
 
     # array = []
     # for i in range(0,9):
