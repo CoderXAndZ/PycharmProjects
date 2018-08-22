@@ -81,4 +81,4 @@ if __name__ == '__main__':
     print("\n个数",len(unused_files),"\n可能没有引用的文件是：", unused_files)
     text_path = 'unusedFile.txt'
     tex = '\n'.join(sorted(unused_files))
-    os.system('echo "%s" > %s' % (tex, text_path))
+    os.system('echo "%s" > %s' % (tex, text_path))    os.system('echo "%s" > %s' % (tex, text_path))
