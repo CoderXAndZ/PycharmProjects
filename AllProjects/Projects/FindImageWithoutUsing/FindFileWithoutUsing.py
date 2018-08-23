@@ -86,3 +86,4 @@ if __name__ == '__main__':
     text_path = 'unusedFile.txt'
     tex = '\n'.join(sorted(final_file))
     os.system('echo "%s" > %s' % (tex, text_path))
+

@@ -45,7 +45,7 @@ def find_un_used():
     print ('Done!')
 
 def is_ignore(str):
-    ignore = str[:-1] # 将字符串 未标题-1_0、未标题-1_1 等，去掉最后数字
+    ignore = str[:-1] # 将字符串 未标题-1_0、未标题-1_1 等，去掉最后数字,如果是2位数字的，可能会有问题。例如： 未标题-1_20、未标题-1_21，动态添加是把20整体变成不确定的数值
     dynamicStr = ignore+'%d'
 
     command = 'ag "%s" %s' % (dynamicStr, path)
