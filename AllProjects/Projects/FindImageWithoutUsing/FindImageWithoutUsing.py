@@ -6,28 +6,6 @@ import glob
 import os
 import re
 import shutil
-# import time
-
-path = '/Users/admin/iosdeleteYoushangcheng/fmapp'
-
-# 旧的路径
-dstpath = '/Users/admin/iosdeleteYoushangcheng/fmapp/Images.xcassets'
-srcpath = '/Users/admin/iosdeleteYoushangcheng'
-
-# 新的路径
-testOne = '/Users/admin/iosdeleteYoushangcheng/fmapp/'
-testTwo = '/Users/admin/iosdeleteYoushangcheng/Images.xcassets'
-
-if os.path.exists(testTwo) == False:
-    shutil.move(dstpath,srcpath) # 将文件进行移动原因，如果不把文件移动出来，在查找的时候，会再次查找一遍Images.xcassets文件，导致很多没引用的图片也能搜到
-
-# ignores = {r'(image|group)\d+'} # \d匹配一个数字字符。等价于[0-9]，+匹配1或多个正好在它之前的那个字符，
-# ignores = {r'image_\d+'} # 不删除动态赋值的图片
-# ignores = {r'image\d+'} # 不删除动态赋值的图片
-# ignoresImg = {r'image\0d+'}
-# images = glob.glob('%s/Images.xcassets/*/*.imageset' % srcpath)
-images = glob.glob('%s/*/*.imageset' % testTwo)
-print("images的长度：",len(images))
 
 def find_un_used():
     img_names = [os.path.basename(pic)[:-9] for pic in images]
@@ -42,7 +20,7 @@ def find_un_used():
         if pic_name == "code" or pic_name == "phone": # 跳过是因为会报错
             continue
         # command = 'ag "我的_我的邀请_首页_17" /Users/admin/iosdeleteYoushangcheng/fmapp'
-        command = 'ag "%s" %s' % (pic_name, path)
+        command = 'ag "%s" %s' % (pic_name, srcpath)
         print("command是 ==== ",command) # ag "我的_我的邀请_首页_17" /Users/admin/iosdeleteYoushangcheng/fmapp
         # os.popen 执行bash命令， .read()读取执行的结果。
         result = os.popen(command).read()
@@ -85,6 +63,30 @@ def is_ignore(str):
     # return False
 
 if __name__ == '__main__':
+
+    # '/Users/admin/iosdeleteYoushangcheng/fmapp'
+    path = input("Images.xcassets的文件夹路径并点击Enter开始：\n")  # /Users/admin/ios/fmapp/Images.xcassets
+    srcpath = input("输入xcodeproj文件所在文件夹路径并按Enter开始：\n")  # /Users/admin/ios
+
+    # 旧的路径
+    # dstpath = '%s/Images.xcassets' % path
+    # srcpath = '/Users/admin/iosdeleteYoushangcheng'
+
+    # 新的路径
+    # testOne = '/Users/admin/iosdeleteYoushangcheng/fmapp/'
+    testTwo = '%s/%s' % (srcpath,os.path.basename(path)) # /Users/admin/iosdeleteYoushangcheng/Images.xcassets
+
+    if os.path.exists(testTwo) == False:
+        shutil.move(path, srcpath)  # 将文件进行移动原因，如果不把文件移动出来，在查找的时候，会再次查找一遍Images.xcassets文件，导致很多没引用的图片也能搜到
+
+    # ignores = {r'(image|group)\d+'} # \d匹配一个数字字符。等价于[0-9]，+匹配1或多个正好在它之前的那个字符，
+    # ignores = {r'image_\d+'} # 不删除动态赋值的图片
+    # ignores = {r'image\d+'} # 不删除动态赋值的图片
+    # ignoresImg = {r'image\0d+'}
+    # images = glob.glob('%s/Images.xcassets/*/*.imageset' % srcpath)
+    images = glob.glob('%s/*/*.imageset' % testTwo)
+    print("images的长度：", len(images))
+
     find_un_used()
 
 # import glob
