@@ -24,7 +24,7 @@ global time_begin
 def get_bid_data(user_id,money, pwd_str,bid_lilv):
     url = "https://php.rongtuojinrong.com/Rongtuoxinsoc/indexapp/appindexalljava?"
     now_time = round(time.time())
-    token_str = "AppId=iOS&UserId=%s&AppTime=%d"%(user_id,now_time)
+    token_str = "AppId=iOS&UserId=%s&AppTime=%d" % (user_id, now_time)
     # print("now_time:",now_time,"\ntoken_str:",token_str)
     hash = hashlib.md5()
     hash.update(token_str.encode('utf-8'))
@@ -32,21 +32,21 @@ def get_bid_data(user_id,money, pwd_str,bid_lilv):
     # print("hash:", hash, "\ntoken_md5:", token_md5)
 
     # 参数
-    params = {'AppId':'iOS',
-              'UserId':user_id,
-              'AppTime':now_time,
-              'Token':token_md5,
-              'defidenshuxing':"1"
+    params = {'AppId': 'iOS',
+              'UserId': user_id,
+              'AppTime': now_time,
+              'Token': token_md5,
+              'defidenshuxing': "1"
               }
-    request = requests.post(url,data=params)
-    result_dict = json.loads(request.text) # 把 str 转换成 dict
-    result_json = json.dumps(result_dict, sort_keys=True, indent=2) # 把 dict 转换成 json
-    xiangmu_data = result_dict["data"]["xiangmudate"] # 获取首页项目标数据
+    request = requests.post(url, data=params)
+    result_dict = json.loads(request.text)  # 把 str 转换成 dict
+    result_json = json.dumps(result_dict, sort_keys=True, indent=2)  # 把 dict 转换成 json
+    xiangmu_data = result_dict["data"]["xiangmudate"]  # 获取首页项目标数据
     # print(request.encoding) # 查看请求的encoding方式 ISO-8859-1
     # print("请求结果：", request.status_code)
     # print("\n\n请求数据结果request.text：",request.text,"\nrequest.text数据类型：",type(request.text))
     # print("\n\njson结果result：",result_json,"\nresult数据类型：",type(result_json))
-    print("项目标数据：",xiangmu_data)
+    print("项目标数据：", xiangmu_data)
 
     for xiangmu in xiangmu_data:
         # if float(xiangmu["kaishi"]) > 0: # 新标，未到时间，未开始
@@ -59,15 +59,15 @@ def get_bid_data(user_id,money, pwd_str,bid_lilv):
         # else:
         if float(xiangmu["lilv"]) == float(bid_lilv):
 
-            if (float(xiangmu["jindu"])/100 < 1):
+            if (float(xiangmu["jindu"])/100  < 1):
                 global xiangmu_id
                 xiangmu_id = xiangmu["jie_id"]
                 print("已经开始，获取时间差：", xiangmu["start_time"])
-                struct_time = time.strptime(xiangmu["start_time"],"%Y-%m-%d %H:%M:%S") # start_time --> 2018-02-06 14:52:00 转换成时间数组
-                time_stamp =  time.mktime(struct_time) # 时间数组 转换成时间戳
-                difftime = time_stamp - round(time.time()) # 时间差
-                print("时间差：",difftime,"时间time_stamp：",time_stamp)
-                print("正在投，蓝色显示,获取jie_id",xiangmu_id)
+                struct_time = time.strptime(xiangmu["start_time"], "%Y-%m-%d %H:%M:%S")  # start_time --> 2018-02-06 14:52:00 转换成时间数组
+                time_stamp = time.mktime(struct_time)  # 时间数组 转换成时间戳
+                difftime = time_stamp - round(time.time())  # 时间差
+                print("时间差：", difftime, "时间time_stamp：", time_stamp)
+                print("正在投，蓝色显示,获取jie_id", xiangmu_id)
 
                 # 确认投资web页
                 web_data(user_id, money, pwd_str)
@@ -78,18 +78,19 @@ def get_bid_data(user_id,money, pwd_str,bid_lilv):
     print("没有合适利率的标或标的额度已完")
 
     if request.status_code == 200:
-        return (True) # 请求成功！
+        return True  # 请求成功！
     else:
-        return False # 请求失败！
+        return False  # 请求失败！
+
 
 # 确认投资web页
-def web_data(user_id,money,pwd_str):
+def web_data(user_id, money, pwd_str):
     url = "https://www.rongtuojinrong.com/hsesb/esb?"
     now_time = round(time.time())
     token_str = "AppId=huiyuan&UserId=%s&AppTime=%d" % (user_id, now_time)
     hash = hashlib.md5()
     hash.update(token_str.encode('utf-8'))
-    token_md5 = hash.hexdigest() # 验签失败，检查token的参数和params的参数是否相同
+    token_md5 = hash.hexdigest()  # 验签失败，检查token的参数和params的参数是否相同
 
     # 参数
     params = {'AppId': 'huiyuan',
@@ -97,19 +98,19 @@ def web_data(user_id,money,pwd_str):
               'AppTime': now_time,
               'Token': token_md5,
               'defidenshuxing': "1",
-              "CmdId":"LLBidApply",
-              "ProjId":xiangmu_id,
-              "TransAmt":money,
-              "RedPacket":"",
-              "InterestCoupon":""
+              "CmdId": "LLBidApply",
+              "ProjId": xiangmu_id,
+              "TransAmt": money,
+              "RedPacket": "",
+              "InterestCoupon": ""
             }
     data = parse.urlencode(params)
     opener = request.urlopen(url+data)
     content = opener.read().decode('utf-8')
     opener.close()
-    print("web页结果：",content) # ,"\n\n\njson结果：",json.loads(content)
+    print("web页结果：", content)  # ,"\n\n\njson结果：",json.loads(content)
 
-    print("网址是：",url+data)
+    print("网址是：", url+data)
 
     # 密码自动填充
     wd = webdriver.Firefox()
@@ -118,26 +119,27 @@ def web_data(user_id,money,pwd_str):
         wd.get(url + data)
         # wd.maximize_window()
         wait = WebDriverWait(wd, timeout=10)
-        wait.until(EC.presence_of_element_located((By.ID,"pass")),message=u"元素加载超时！")
+        wait.until(EC.presence_of_element_located((By.ID, "pass")), message=u"元素加载超时！")
         wait.until(EC.presence_of_element_located((By.ID, "mainAcceptIpt")), message=u"元素加载超时！")
         input = wd.find_element_by_id("pass")
-        print("current_url:",wd.current_url)
-        input.send_keys(pwd_str) # 密码自动填充
+        print("current_url:", wd.current_url)
+        input.send_keys(pwd_str)  # 密码自动填充
+        # wd.find_element_by_id('maincookiesAcceptIpt').click()
         wd.find_element_by_id('mainAcceptIpt').click()
-        # stasus = wd.find_element_by_id('sub').click()
+        stasus = wd.find_element_by_id('sub').click()
 
-        print("cookies：",wd.get_cookies())
+        print("cookies：", wd.get_cookies())
 
         # print("\n\nwd：",wd,"\n\n\n点击结果：status",stasus)
         print("current_url2:", wd.current_url)
-        print("wd.current_window_handle",wd.current_window_handle)
+        print("wd.current_window_handle", wd.current_window_handle)
 
         print("current_url3:", wd.current_url)
         time_end = time.time()
         time_interval = time_end-time_begin
-        print("运行所需时间:",time_interval)
+        print("运行所需时间:", time_interval)
         time.sleep(8)
-        wd.close() # 关闭浏览器
+        # wd.close()  # 关闭浏览器
 
     except NoSuchElementException as e:
         print("异常信息：",e.msg)
