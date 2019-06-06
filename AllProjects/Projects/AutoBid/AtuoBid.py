@@ -144,6 +144,7 @@ def web_data(user_id, money, pwd_str):
     except NoSuchElementException as e:
         print("异常信息：",e.msg)
 
+
 # 时间判断
 def time_judge(user_id,money,pwd_str,time_bid,bid_lilv):
     flag = 1
